@@ -3,7 +3,10 @@ import { type DeployFunction } from 'hardhat-deploy/types'
 import { EndpointId, endpointIdToNetwork } from '@layerzerolabs/lz-definitions'
 import { getDeploymentAddressAndAbi } from '@layerzerolabs/lz-evm-sdk-v2'
 
-const contractName = 'MyOFTUpgradeable'
+const contractName = 'KWDK'
+
+const tokenName = 'KWDK'
+const tokenSymbol = 'KWDK'
 
 const deploy: DeployFunction = async (hre) => {
     const { deploy } = hre.deployments
@@ -27,7 +30,7 @@ const deploy: DeployFunction = async (hre) => {
             execute: {
                 init: {
                     methodName: 'initialize',
-                    args: ['MyOFT', 'MOFT', signer.address], // TODO: add name/symbol
+                    args: [tokenName, tokenSymbol, signer.address], // TODO: add name/symbol
                 },
             },
         },

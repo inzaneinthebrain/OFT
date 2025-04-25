@@ -3,7 +3,7 @@ pragma solidity ^0.8.22;
 
 import { OFTUpgradeable } from "@layerzerolabs/oft-evm-upgradeable/contracts/oft/OFTUpgradeable.sol";
 
-contract MyOFTUpgradeable is OFTUpgradeable {
+contract KWDK is OFTUpgradeable {
     constructor(address _lzEndpoint) OFTUpgradeable(_lzEndpoint) {
         _disableInitializers();
     }
@@ -14,6 +14,10 @@ contract MyOFTUpgradeable is OFTUpgradeable {
     }
 
     function decimals() public pure override returns (uint8) {
+        return 3;
+    }
+
+    function sharedDecimals() public pure override returns (uint8) {
         return 3;
     }
 }
