@@ -12,4 +12,8 @@ contract MyOFTUpgradeable is OFTUpgradeable {
         __OFT_init(_name, _symbol, _delegate);
         __Ownable_init(_delegate);
     }
+
+    function decimals() public pure override returns (uint8) {
+        return 3;
+    }
 }
