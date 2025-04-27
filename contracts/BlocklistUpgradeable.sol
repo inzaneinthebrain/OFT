@@ -33,17 +33,9 @@ abstract contract BlocklistUpgradeable is Initializable, OwnableUpgradeable, IBl
         }
     }
 
-    function isBlocked(address account) public view returns (bool) {
-        return _getBlocklistStorage().isBlocked[addressToBytes32(account)];
-    }
-    function addToBlocklist(address account) public onlyOwner {
-        addToBlocklist(addressToBytes32(account));
-    }
-
-    function removeFromBlocklist(address account) public onlyOwner {
-        removeFromBlocklist(addressToBytes32(account));
-    }
-
+    /**
+     * @dev LayerZero uses bytes32 for addresses. This is to make it compatible with non-EVM chains.
+     */
     function isBlocked(bytes32 account) public view returns (bool) {
         return _getBlocklistStorage().isBlocked[account];
     }
@@ -56,6 +48,20 @@ abstract contract BlocklistUpgradeable is Initializable, OwnableUpgradeable, IBl
     function removeFromBlocklist(bytes32 account) public onlyOwner {
         emit Blocklist_Removed(account);
         _getBlocklistStorage().isBlocked[account] = false;
+    }
+
+    /**
+     * @dev Helper wrapper that handles blocklist operations for address types.
+     */
+    function isBlocked(address account) public view returns (bool) {
+        return _getBlocklistStorage().isBlocked[addressToBytes32(account)];
+    }
+    function addToBlocklist(address account) public onlyOwner {
+        addToBlocklist(addressToBytes32(account));
+    }
+
+    function removeFromBlocklist(address account) public onlyOwner {
+        removeFromBlocklist(addressToBytes32(account));
     }
 
     function addressToBytes32(address _addr) public pure returns (bytes32) {
