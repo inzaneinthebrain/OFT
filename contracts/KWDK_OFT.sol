@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.22;
 
+import { IKWDK_OFT } from "./interfaces/IKWDK_OFT.sol";
+
 import { OFTUpgradeable } from "@layerzerolabs/oft-evm-upgradeable/contracts/oft/OFTUpgradeable.sol";
 import { BlocklistUpgradeable } from "./BlocklistUpgradeable.sol";
 
-contract KWDK is OFTUpgradeable, BlocklistUpgradeable {
+contract KWDK is OFTUpgradeable, BlocklistUpgradeable, IKWDK_OFT {
     constructor(address _lzEndpoint) OFTUpgradeable(_lzEndpoint) {
         _disableInitializers();
     }
@@ -21,6 +23,14 @@ contract KWDK is OFTUpgradeable, BlocklistUpgradeable {
 
     function sharedDecimals() public pure override returns (uint8) {
         return 3;
+    }
+
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
+
+    function burn(address from, uint256 amount) public onlyOwner {
+        _burn(from, amount);
     }
 
     function _update(address from, address to, uint256 value) internal override {
