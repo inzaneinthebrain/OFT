@@ -11,7 +11,7 @@ import { IBlocklistUpgradeable } from "./interfaces/IBlocklistUpgradeable.sol";
  */
 abstract contract BlocklistUpgradeable is Initializable, OwnableUpgradeable, IBlocklistUpgradeable {
     struct BlocklistStorage {
-        mapping(address => bool) isBlocked;
+        mapping(bytes32 => bool) isBlocked;
     }
 
     // keccak256(abi.encode(uint256(keccak256("layerzerov2.storage.blocklist")) - 1)) & ~bytes32(uint256(0xff))
@@ -34,16 +34,31 @@ abstract contract BlocklistUpgradeable is Initializable, OwnableUpgradeable, IBl
     }
 
     function isBlocked(address account) public view returns (bool) {
+        return _getBlocklistStorage().isBlocked[addressToBytes32(account)];
+    }
+    function addToBlocklist(address account) public onlyOwner {
+        addToBlocklist(addressToBytes32(account));
+    }
+
+    function removeFromBlocklist(address account) public onlyOwner {
+        removeFromBlocklist(addressToBytes32(account));
+    }
+
+    function isBlocked(bytes32 account) public view returns (bool) {
         return _getBlocklistStorage().isBlocked[account];
     }
 
-    function addToBlocklist(address account) public onlyOwner {
+    function addToBlocklist(bytes32 account) public onlyOwner {
         emit Blocklist_Added(account);
         _getBlocklistStorage().isBlocked[account] = true;
     }
 
-    function removeFromBlocklist(address account) public onlyOwner {
+    function removeFromBlocklist(bytes32 account) public onlyOwner {
         emit Blocklist_Removed(account);
         _getBlocklistStorage().isBlocked[account] = false;
+    }
+
+    function addressToBytes32(address _addr) public pure returns (bytes32) {
+        return bytes32(uint256(uint160(_addr)));
     }
 }

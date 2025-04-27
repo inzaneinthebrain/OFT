@@ -39,7 +39,7 @@ contract BlocklistUpgradeableTest is Test {
 
     function test_blocking() public {
         vm.expectEmit(true, true, true, true);
-        emit IBlocklistUpgradeable.Blocklist_Added(block_user);
+        emit IBlocklistUpgradeable.Blocklist_Added(blocklist.addressToBytes32(block_user));
         blocklist.addToBlocklist(block_user);
         assertTrue(blocklist.isBlocked(block_user));
     }

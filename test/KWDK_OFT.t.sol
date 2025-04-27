@@ -50,7 +50,10 @@ contract KWDK_OFTTest is Test {
         deal(address(kwdk), block_user, 100);
         vm.startPrank(block_user);
         vm.expectRevert(
-            abi.encodeWithSelector(IBlocklistUpgradeable.BlocklistUpgradeable__Blocked.selector, block_user)
+            abi.encodeWithSelector(
+                IBlocklistUpgradeable.BlocklistUpgradeable__Blocked.selector,
+                kwdk.addressToBytes32(block_user)
+            )
         );
         kwdk.transfer(alice, 100);
         vm.stopPrank();
